@@ -1,520 +1,675 @@
-# 🧠 AI-Generated vs Human-Written Text Detection using NLP
+# 🧠 AI-Generated vs Human-Written Text Detection
+
+A machine-learning and NLP project for classifying text as **AI-generated** or **human-written**, combining text preprocessing, hybrid feature engineering, traditional machine learning, RoBERTa-based deep learning, ensemble learning, and a Streamlit interface.
+
+> **Important:** AI-text detection is probabilistic. The system should be treated as an analytical aid rather than definitive proof of authorship.
+
+---
 
 ## 📌 Project Overview
 
-With the rapid advancement of Large Language Models (LLMs) such as ChatGPT, Gemini, Claude, and other generative AI systems, distinguishing AI-generated content from human-written text has become an important challenge in academia, publishing, education, and content verification.
+With the rapid growth of Large Language Models (LLMs), distinguishing AI-generated content from human-written text has become an important NLP problem across education, research, publishing, and content verification.
 
-This project presents a complete AI Text Detection System that combines:
+This project implements an end-to-end AI text detection pipeline combining:
 
-* Natural Language Processing (NLP)
-* Machine Learning (ML)
-* Deep Learning (RoBERTa)
-* Ensemble Learning
+- Natural Language Processing (NLP)
+- Machine Learning (ML)
+- Deep Learning with RoBERTa
+- Hybrid feature engineering
+- Semantic embeddings
+- Ensemble learning
+- Streamlit deployment
+- Real-time text classification
 
-The system classifies text into:
+### Classification Labels
 
-| Label | Meaning       |
-| ----- | ------------- |
-| 0     | Human Written |
-| 1     | AI Generated  |
+| Label | Meaning |
+|---|---|
+| `0` | Human Written |
+| `1` | AI Generated |
 
 ---
 
 ## 🎯 Key Features
 
-* Complete NLP Pipeline
-* Text Cleaning & Preprocessing
-* Hybrid Feature Engineering
-* TF-IDF Features
-* Stylometric Features
-* POS-based Linguistic Features
-* Semantic Embeddings (SBERT)
-* Logistic Regression
-* XGBoost
-* RoBERTa Transformer Model
-* Ensemble Learning
-* Streamlit Deployment
-* Real-Time Prediction
+- Complete NLP preprocessing pipeline
+- Text cleaning and normalization
+- Duplicate and empty-record handling
+- Train/test data splitting
+- Class balancing
+- TF-IDF feature extraction
+- Stylometric features
+- POS-based linguistic features
+- Semantic embeddings using `all-MiniLM-L6-v2`
+- Logistic Regression
+- XGBoost
+- Stacking / ensemble learning
+- RoBERTa transformer model
+- Weighted ensemble prediction
+- Accuracy, Precision, Recall and F1 evaluation
+- Streamlit web interface
+- Confidence/probability output
+- Real-time inference
 
 ---
 
-# 📚 Research Foundation
+## 🏗️ System Architecture
 
-This project is inspired by research conducted on AI-generated text detection.
+```text
+Raw Dataset
+     │
+     ▼
+Text Preprocessing
+     │
+     ├── Lowercasing
+     ├── URL Removal
+     ├── Special Character Removal
+     ├── Number Removal
+     ├── Tokenization
+     ├── Stopword Removal
+     └── Lemmatization
+     │
+     ▼
+Dataset Cleaning & Splitting
+     │
+     ├── Duplicate Removal
+     ├── Empty Text Removal
+     ├── Class Balancing
+     └── Train/Test Split
+     │
+     ▼
+Hybrid Feature Engineering
+     │
+     ├── TF-IDF
+     ├── Stylometric Features
+     ├── POS Features
+     └── Semantic Embeddings
+     │
+     ├───────────────────────┐
+     ▼                       ▼
+Traditional ML          RoBERTa Transformer
+     │                       │
+     ├── Logistic Regression │
+     └── XGBoost             │
+     │                       │
+     └──────────┬────────────┘
+                ▼
+        Ensemble Prediction
+                │
+                ▼
+           Evaluation
+                │
+                ▼
+      Streamlit Deployment
+                │
+                ▼
+       AI / Human Prediction
+```
+
+---
+
+## 📚 Research Foundation
+
+This project is based on research related to AI-generated text detection.
 
 ### Research Paper
 
-Research Paper Link:
+Research material:
+
 https://drive.google.com/drive/folders/1dELjl1SUJa16CEklBh8yKLnPaFNmKM2i?usp=drive_link
 
 ### Dataset Source
 
-Dataset Name:
-CHEAT Dataset (IEEE Abstract Dataset)
+**CHEAT Dataset — IEEE Abstract Dataset**
 
-Dataset Link:
 https://github.com/botianzhe/CHEAT
 
 ### Dataset Usage Notice
 
-The dataset used in this project is obtained from the original research source.
+The dataset is obtained from the original research source and is **not included in this repository** because of dataset licensing, copyright considerations, and repository-size limitations.
 
-Due to licensing restrictions, copyright considerations, and repository size limitations, the dataset is NOT included in this GitHub repository.
-
-Users are requested to download the dataset directly from the original source.
+Please obtain the dataset directly from its original source and follow its applicable license and usage requirements.
 
 ---
 
-# 📊 Dataset Information
+## 📊 Dataset Information
 
-### Files Used
+The project uses the following source files:
 
-| File Name                    | Label |
-| ---------------------------- | ----- |
-| ieee-init.xlsx               | Human |
-| ieee-chatgpt-generation.xlsx | AI    |
-| ieee-chatgpt-polish.xlsx     | AI    |
-| ieee-chatgpt-fusion.xlsx     | AI    |
+| File | Label |
+|---|---|
+| `ieee-init.xlsx` | Human |
+| `ieee-chatgpt-generation.xlsx` | AI |
+| `ieee-chatgpt-polish.xlsx` | AI |
+| `ieee-chatgpt-fusion.xlsx` | AI |
 
-### Final Dataset Statistics
+### Dataset Statistics
 
-* Total Samples: ~50,000
-* Human Samples: ~15,000
-* AI Samples: ~35,000
+The project documentation reports approximately:
 
----
+- **Total samples:** ~50,000
+- **Human samples:** ~15,000
+- **AI samples:** ~35,000
 
-# ⚙️ Complete Project Pipeline
-
-Raw Dataset
-
-↓
-
-Text Preprocessing
-
-↓
-
-Data Cleaning
-
-↓
-
-Balanced Train-Test Split
-
-↓
-
-Hybrid Feature Extraction
-
-↓
-
-Machine Learning Models
-
-↓
-
-RoBERTa Transformer
-
-↓
-
-Ensemble Learning
-
-↓
-
-Evaluation
-
-↓
-
-Deployment
+Dataset availability and exact counts may depend on the version of the source data used during experimentation.
 
 ---
 
-# 🧹 Text Preprocessing
+## 🧹 Text Preprocessing
 
-### File
+Main preprocessing implementation:
 
+```text
 preprocessing/preprocess.py
+```
 
-### Operations Performed
+### Operations
 
-* Lowercasing
-* URL Removal
-* Special Character Removal
-* Number Removal
-* Tokenization
-* Stopword Removal
-* Lemmatization
+- Lowercasing
+- URL removal
+- Special-character removal
+- Number removal
+- Tokenization
+- Stopword removal
+- Lemmatization
 
 ### Output
 
+```text
 data/final_preprocessed_data.csv
+```
 
-Columns:
+Expected columns:
 
-* clean_text
-* label
+```text
+clean_text
+label
+```
 
 ---
 
-# 🔀 Dataset Splitting
+## 🔀 Dataset Splitting
 
-### File
+Main implementation:
 
+```text
 models/data_split.py
+```
 
-### Functionality
+### Processing
 
-* Removes duplicate records
-* Removes empty text samples
-* Balances class distribution
-* Prevents data leakage
-* Creates train-test split
+- Removes duplicate records
+- Removes empty text samples
+- Balances class distribution
+- Helps prevent data leakage
+- Creates training and testing sets
 
-### Output
+### Split
 
-* train_data.csv
-* test_data.csv
+| Dataset | Percentage |
+|---|---:|
+| Training | 80% |
+| Testing | 20% |
 
-### Split Ratio
+Generated files:
 
-* Training: 80%
-* Testing: 20%
+```text
+train_data.csv
+test_data.csv
+```
 
 ---
 
-# 🧠 Hybrid Feature Engineering
+## 🧠 Hybrid Feature Engineering
 
-### File
+Implementation:
 
+```text
 features/hybrid_features_from_split.py
+```
 
-### Feature Categories
+The project combines several types of text representations.
 
-#### 1. TF-IDF Features
+### 1. TF-IDF Features
 
-* Unigrams
-* Bigrams
-* Maximum Features: 5000
+- Unigrams
+- Bigrams
+- Maximum features: `5000`
 
-#### 2. Stylometric Features
+### 2. Stylometric Features
 
-* Average Word Length
-* Average Sentence Length
-* Stopword Ratio
-* Readability Metrics
+Examples include:
 
-#### 3. POS Features
+- Average word length
+- Average sentence length
+- Stopword ratio
+- Readability metrics
 
-* Noun Ratio
-* Verb Ratio
-* Adjective Ratio
-* Adverb Ratio
+### 3. POS-Based Features
 
-#### 4. Semantic Features
+Examples include:
 
-Model:
+- Noun ratio
+- Verb ratio
+- Adjective ratio
+- Adverb ratio
+
+### 4. Semantic Features
+
+Embedding model:
+
+```text
 all-MiniLM-L6-v2
+```
 
-Embedding Dimension:
+Embedding dimension:
+
+```text
 384
+```
 
-### Final Feature Vector
+### Combined Feature Vector
 
-5395 Features Per Sample
+The project documentation reports:
+
+```text
+5,395 features per sample
+```
 
 ---
 
-# 🤖 Machine Learning Models
+## 🤖 Traditional Machine Learning
 
-### File
+Implementation:
 
+```text
 models/train_models.py
+```
 
-### Models Implemented
+### Models
 
 1. Logistic Regression
 2. XGBoost
 3. Stacking Ensemble
 
-### Best Traditional ML Model
+The project documentation reports Logistic Regression as the strongest traditional ML model, with approximately **86% accuracy** in the reported experiment.
 
-Logistic Regression
-
-Accuracy:
-~86%
+> Reported results are experiment-specific and should not be interpreted as universal model performance.
 
 ---
 
-# 🧠 Deep Learning Model
+## 🧠 RoBERTa Deep Learning Model
 
-### File
+Implementation:
 
+```text
 models/train_roberta.py
+```
 
-### Transformer Model
+Transformer:
 
-Model:
+```text
 roberta-base
+```
 
-Training Configuration:
+### Training Configuration
 
-* Epochs: 3
-* Max Sequence Length: 256
-* GPU Enabled Training
+| Parameter | Value |
+|---|---|
+| Model | `roberta-base` |
+| Epochs | 3 |
+| Maximum sequence length | 256 |
+| GPU | Enabled during training |
 
 ---
 
-# 🔥 Ensemble Model
+## 🔥 Ensemble Learning
 
-Final Prediction Formula
+The documented final prediction combines the transformer and traditional ML predictions:
 
-0.7 × RoBERTa + 0.3 × Logistic Regression
+```text
+Final Prediction =
+0.7 × RoBERTa
++
+0.3 × Logistic Regression
+```
 
 ### Why Ensemble?
 
-RoBERTa captures:
+**RoBERTa** contributes:
 
-* Context
-* Semantics
-* Deep Language Understanding
+- Context understanding
+- Semantic representation
+- Deep language understanding
 
-Logistic Regression captures:
+**Logistic Regression** contributes:
 
-* Statistical Writing Patterns
-* Vocabulary Distribution
+- Statistical writing patterns
+- Vocabulary distribution
+- Feature-based classification
 
-Combining both improves overall performance.
+Combining the two approaches is intended to leverage complementary signals.
 
 ---
 
-# 📊 Performance Evaluation
+## 📊 Performance Evaluation
 
-### File
+Evaluation implementation:
 
+```text
 evaluation/evaluate.py
+```
 
-### Metrics Used
+### Metrics
 
-* Accuracy
-* Precision
-* Recall
-* F1 Score
+The project evaluates models using:
 
-### Results
+- Accuracy
+- Precision
+- Recall
+- F1 Score
 
-| Model               | Accuracy |
-| ------------------- | -------- |
-| Logistic Regression | ~86%     |
-| RoBERTa             | ~89%     |
-| Ensemble Model      | ~90%     |
+### Reported Accuracy
 
-### Final Performance
+| Model | Reported Accuracy |
+|---|---:|
+| Logistic Regression | ~86% |
+| RoBERTa | ~89% |
+| Ensemble Model | ~90% |
 
-Accuracy:
-89–90%
+### Performance Note
 
-F1 Score:
-89–90%
+The current documentation supports an approximate **89–90% accuracy** result for the final system.
+
+The README intentionally does **not** state a specific F1-score result because a verified measured F1 value is not currently documented here.
+
+If a reproducible evaluation run produces an exact F1 score, it can be added to this section with the corresponding evaluation output.
 
 ---
 
-# 🚀 Streamlit Deployment
+## 🚀 Streamlit Application
 
-### File
+Application entry point:
 
+```text
 app.py
+```
 
-### Features
+The Streamlit application provides a web interface for text classification.
 
-* Text Input Box
-* AI/Human Classification
-* Confidence Score
-* Ensemble Prediction
-* Real-Time Inference
+### Application Features
 
-### Run Application
+- Text input
+- AI/Human classification
+- Confidence/probability scores
+- Prediction output
+- Real-time inference
+
+### Run the Application
 
 ```bash
 streamlit run app.py
 ```
 
-### Prediction Output
+---
 
-* 🤖 AI Generated
-* 👤 Human Written
-* Confidence Percentage
+## 🌐 Live Demo
+
+The project is currently deployed at:
+
+https://chiragpawar.vercel.app/
 
 ---
 
-# 📦 Installation Guide
+## 📸 Application Screenshots
 
-## Clone Repository
+### 1. Application Interface
+
+![AI vs Human Text Detector](screenshots/application-interface.png)
+
+### 2. Prediction Result
+
+![Prediction Result](screenshots/prediction-result.png)
+
+> Make sure the two image files exist in the `screenshots/` directory with exactly these filenames.
+
+---
+
+## 📦 Installation
+
+### 1. Clone the Repository
 
 ```bash
-https://github.com/LeutnantMutig/-AI-vs-Human-Text-Detection
+git clone https://github.com/LeutnantMutig/AI-vs-Human-Text-Detection.git
+cd AI-vs-Human-Text-Detection
 ```
 
-```bash
-cd AI vs Human Text-Detection
-```
-
-## Create Virtual Environment
+### 2. Create a Virtual Environment
 
 ```bash
 python -m venv venv
 ```
 
-Activate Environment
+### 3. Activate the Environment
 
-Windows:
+#### Windows
 
-```bash
+```powershell
 venv\Scripts\activate
 ```
 
-Linux/Mac:
+#### Linux / macOS
 
 ```bash
 source venv/bin/activate
 ```
 
-## Install Dependencies
+### 4. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
+### 5. Run the Application
+
+```bash
+streamlit run app.py
+```
+
 ---
 
-# 🏋️ Training From Scratch
+## 🏋️ Training From Scratch
 
-Step 1
+If you want to reproduce the documented training pipeline, run the stages in order.
+
+### Step 1 — Preprocessing
 
 ```bash
 python preprocessing/preprocess.py
 ```
 
-Step 2
+### Step 2 — Dataset Split
 
 ```bash
 python models/data_split.py
 ```
 
-Step 3
+### Step 3 — Hybrid Feature Engineering
 
 ```bash
 python features/hybrid_features_from_split.py
 ```
 
-Step 4
+### Step 4 — Train Traditional Models
 
 ```bash
 python models/train_models.py
 ```
 
-Step 5
+### Step 5 — Train RoBERTa
 
 ```bash
 python models/train_roberta.py
 ```
 
+> Training the transformer model may require substantial compute resources and can take significantly longer than the preprocessing and traditional ML stages.
+
 ---
 
-# 📥 Pretrained Models
+## 📥 Pretrained Models
 
-Due to GitHub size limitations, pretrained RoBERTa models are not included in this repository.
+Pretrained RoBERTa model files are not stored directly in this repository because of repository-size limitations.
 
-Download Pretrained Models:
+Download the available pretrained model files from:
 
-Google Drive:
 https://drive.google.com/drive/folders/1ORZli3qaT7Oo8f3AN9XfE-dJ82crCiNN?usp=drive_link
 
-After downloading, place the files inside:
+Place the downloaded files in:
 
+```text
 models/saved/
+```
 
 ---
 
-# 📁 Project Structure
+## 📁 Project Structure
 
-AI-Text-Detection/
-
+```text
+AI-vs-Human-Text-Detection/
+│
 ├── data/
-
 ├── preprocessing/
-
 ├── features/
-
 ├── models/
-
 ├── evaluation/
-
 ├── screenshots/
-
+│   ├── application-interface.png
+│   └── prediction-result.png
+│
 ├── app.py
-
 ├── requirements.txt
-
 ├── README.md
-
+├── LICENSE
 └── .gitignore
+```
+
+The exact working-tree contents can vary depending on local/generated files that are intentionally excluded by `.gitignore`.
 
 ---
 
-# 📸 Screenshots
+## ⚠️ Limitations
 
-Add application screenshots here.
+AI-generated text detection has important limitations.
 
-Examples:
-
-* Streamlit Interface
-
-  screenshots\Streamlit Interface.png\
-
-* Prediction Results
-
-  screenshots\Prediction Results.png\
+- Human and AI writing styles can overlap.
+- Academic or highly formal writing may be misclassified.
+- Model performance depends on dataset quality and diversity.
+- Newer or unseen language models may behave differently from the training data.
+- Detection confidence is not proof of authorship.
+- Results may change when the dataset, preprocessing pipeline, threshold, or model configuration changes.
+- Generalization to real-world text outside the training distribution requires additional validation.
 
 ---
 
-# ⚠️ Limitations
+## 🔬 Reproducibility Notes
 
-* Academic writing may occasionally be misclassified.
-* Human and AI writing styles may overlap.
-* Performance depends on dataset diversity.
-* Newer LLMs may require retraining for optimal detection.
+For meaningful reproduction of the reported results:
+
+1. Use the intended source dataset.
+2. Follow the preprocessing pipeline.
+3. Use the documented train/test split procedure.
+4. Keep model and feature configurations consistent.
+5. Run the evaluation script on the resulting models.
+6. Record the exact dataset version, random seeds, and evaluation outputs.
+
+When reporting new results, include the actual measured metrics rather than estimated or rounded values.
 
 ---
 
-# 🏁 Conclusion
+## 🛠️ Technology Stack
 
-This project demonstrates a complete end-to-end NLP solution for AI-generated text detection.
+| Category | Technology |
+|---|---|
+| Language | Python |
+| NLP | NLTK / text preprocessing |
+| Feature Engineering | TF-IDF, stylometric and POS features |
+| Semantic Embeddings | Sentence Transformers / `all-MiniLM-L6-v2` |
+| Traditional ML | Scikit-learn |
+| Gradient Boosting | XGBoost |
+| Deep Learning | PyTorch / Transformers |
+| Transformer | RoBERTa |
+| Web Interface | Streamlit |
+| Version Control | Git / GitHub |
 
-The project integrates:
+---
 
-* NLP
-* Feature Engineering
-* Machine Learning
-* Deep Learning
-* Ensemble Learning
-* Real-Time Deployment
+## 📌 Project Workflow Summary
 
-The final ensemble system achieves approximately 90% accuracy and provides a practical solution for detecting AI-generated content in academic and research environments.
+```text
+Dataset
+   ↓
+Preprocessing
+   ↓
+Cleaning & Deduplication
+   ↓
+Train/Test Split
+   ↓
+Hybrid Feature Engineering
+   ↓
+Traditional ML ──────┐
+                     ├──► Ensemble ───► Evaluation
+RoBERTa ─────────────┘
+                                      ↓
+                                Streamlit App
+                                      ↓
+                              AI / Human Result
+```
+
+---
+
+## 🏁 Conclusion
+
+This project demonstrates an end-to-end NLP workflow for AI-generated versus human-written text classification.
+
+It combines:
+
+- Text preprocessing
+- Feature engineering
+- Traditional machine learning
+- Semantic embeddings
+- Transformer-based deep learning
+- Ensemble learning
+- Model evaluation
+- Streamlit deployment
+
+The documented experiments report approximately **90% accuracy** for the final ensemble approach.
+
+The project is intended as an applied NLP and machine-learning demonstration and should be further validated before being used for high-stakes authorship decisions.
 
 ---
 
 ## 👨‍💻 Author
 
-Chirag Pawar
+**Chirag Pawar**
 
 B.Tech Computer Science Engineering (AI & ML)
 
-GitHub:
- https://github.com/LeutnantMutig
+- GitHub: https://github.com/LeutnantMutig
+- LinkedIn: https://www.linkedin.com/in/chiragpawar01
 
-LinkedIn:
- www.linkedin.com/in/chiragpawar01
+---
 
+## ⭐ Support
 
-# ⭐ Support
+If you find this project useful:
 
-If you found this project useful, consider giving it a star on GitHub.
+- ⭐ Star the repository
+- 🍴 Fork the project
+- 📢 Share it with others
+- 💬 Provide feedback or suggestions
 
-⭐ Star the repository 🍴 Fork the project 📢 Share with others
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**. See the [`LICENSE`](LICENSE) file for details.
